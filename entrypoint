@@ -1,0 +1,22 @@
+#!/bin/bash
+set -euo pipefail
+
+# Create a process group so we can easily kill all our children.
+set -m
+
+cleanup() {
+  kill 0
+}
+
+trap cleanup EXIT
+
+# Initialize a default conf if one isn't present.
+if [[ ! -e /root/.defcoin/defcoin.conf ]]; then
+  mkdir -p /root/.defcoin
+  printf '%s\n%s\n' "rpcuser=defcoinrpc" "rpcpassword=$(pwgen 64)" > /root/.defcoin/defcoin.conf
+  chmod 600 /root/.defcoin/defcoin.conf
+fi
+
+tail -F /root/.defcoin/debug.log &
+/bin/defcoind "$@" &
+wait $!
