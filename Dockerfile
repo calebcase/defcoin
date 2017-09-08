@@ -22,6 +22,6 @@ RUN apt-get update && \
       pwgen
 COPY --from=builder /src/github.com/calebcase/defcoin/src/defcoind /bin/defcoind
 COPY entrypoint /bin/entrypoint
-EXPOSE 1337
+EXPOSE 9337
 ENTRYPOINT ["/bin/entrypoint"]
 VOLUME ["/root/.defcoin"]
